@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>ImgTransfomrs</title>
+  </head>
+
+  <body>
+    <div class="container column">
+      <h2 class="heading">Transformar Imagen</h2>
+
+      <div class="content center mt-2">
+        <div id="canvas" class="img-content center oculto"></div>
+
+        <div class="options-content column mb-1">
+          <input type="file" id="fileInput" accept="image/*" />
+
+          <button id="updload">Subir Imagen</button>
+
+          <div id="options" class="column oculto">
+            <button id="verNegativo">Negativo</button>
+
+            <div class="option-row center">
+              <button id="rotateRight">
+                Rotar <ion-icon name="reload-outline"></ion-icon>
+              </button>
+              <button id="rotateLeft">
+                Rotar <ion-icon class="rotate-icon" name="reload-outline"></ion-icon>
+              </button>
+            </div>
+
+            <button id="blur">Desenfoque</button>
+
+            <button>Descargar</button>
+          </div>
+
+          <div id="slidecontainer" class="slidecontainer mt-3 oculto">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              class="slider"
+              id="slider"
+            />
+            <p>Valor: <span id="value"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
