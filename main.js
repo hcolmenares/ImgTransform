@@ -1,16 +1,20 @@
 /*** Establecer elementos ***/
 
 let rotacion = 1;
-let isNegativo = 1;
+let isNegativo = false;
+let isBlur = false;
+let isCutting = false;
 const containerDiv = document.getElementById("container");
 const canvasDiv = document.getElementById("canvas");
 const optionsDiv = document.getElementById("options");
 const verNegativoDiv = document.getElementById("verNegativo");
 const slider = document.getElementById("slider");
 const circleSize = document.getElementById("circleSize");
+const subtractBtn = document.getElementById("subtract");
+const addBtn = document.getElementById("add");
+const subtractBlurBtn = document.getElementById("subtractBlur");
+const addBlurBtn = document.getElementById("addBlur");
 const slidecontainer = document.getElementById("slidecontainer");
-const output = document.getElementById("value");
-const outputCircle = document.getElementById("valueMask");
 const rotateRight = document.getElementById("rotateRight");
 const rotateLeft = document.getElementById("rotateLeft");
 const fileInput = document.getElementById("fileInput");
@@ -19,13 +23,11 @@ const blurBtn = document.getElementById("blur");
 const applyMaskBtn = document.getElementById("applyMask");
 const slideBarBtn = document.getElementById("slideBar");
 
-output.innerHTML = slider.value;
-outputCircle.innerHTML = circleSize.value;
-
 /*** Añadir Listerner ***/
 
 updload.addEventListener("click", function () {
-  document.getElementById("fileInput").click();
+  slider.value = 5;
+  fileInput.click();
 });
 
 rotateRight.addEventListener("click", function () {
@@ -53,37 +55,83 @@ fileInput.addEventListener("change", function (e) {
 });
 
 verNegativoDiv.addEventListener("click", function () {
-  let img = document.querySelector(".canvas");
-  if (!img) return;
-  if (isNegativo % 2 == 0) {
-    img.style.filter = `hue-rotate(90deg)`;
-  } else {
-    img.style.filter = `hue-rotate(0deg)`;
+  const img = document.querySelector(".canvas");
+  isNegativo
+    ? (img.style.filter = `hue-rotate(0deg)`)
+    : (img.style.filter = `hue-rotate(90deg)`);
+  isNegativo = !isNegativo;
+});
+
+subtractBlurBtn.addEventListener("click", function () {
+  let varNumber = Number(slider.value) - 1;
+  if (varNumber <= 1) {
+    slider.value = 1;
+    subtractBlurBtn.setAttribute("disabled", true);
+    return;
   }
-  isNegativo++;
+  addBlurBtn.removeAttribute("disabled", true);
+  aplicateBlur(varNumber);
+  slider.value = varNumber;
+});
+
+addBlurBtn.addEventListener("click", function () {
+  let varNumber = Number(slider.value) + 1;
+  if (varNumber >= 100) {
+    slider.value = 100;
+    addBlurBtn.setAttribute("disabled", true);
+    return;
+  }
+  subtractBlurBtn.removeAttribute("disabled", true);
+  aplicateBlur(varNumber);
+  slider.value = varNumber;
 });
 
 blurBtn.addEventListener("click", function () {
+  if (!isBlur) {
+    aplicateBlur(slider.value);
+    slidecontainer.classList.remove("oculto");
+  } else {
+    aplicateBlur(1);
+    slidecontainer.classList.add("oculto");
+  }
+  isBlur = !isBlur;
+});
+
+slider.addEventListener("change", function () {
+  console.log("banderita", slider.value);
   aplicateBlur(slider.value);
 });
 
-circleSize.addEventListener("input", function() {
-  const mask = document.getElementById("mask");
-  const finalValue = circleSize.value;
-  mask.style.setProperty("--circle-size", `${finalValue}px`);
+subtractBtn.addEventListener("click", function () {
+  let varNumber = Number(circleSize.value);
+  if (varNumber <= 10) {
+    subtractBtn.setAttribute("disabled", true);
+    circleSize.value = 10;
+    return;
+  }
+  circleSize.value = varNumber - 10;
+  adjustCircleSize();
+});
+
+addBtn.addEventListener("click", function () {
+  circleSize.value = Number(circleSize.value) + 10;
+  subtractBtn.removeAttribute("disabled", true);
+  adjustCircleSize();
+});
+
+circleSize.addEventListener("change", function () {
+  adjustCircleSize();
 });
 
 applyMaskBtn.addEventListener("click", function () {
   makeMask();
+  if (!isCutting) {
+    slideBarBtn.classList.remove("oculto");
+  } else {
+    slideBarBtn.classList.add("oculto");
+  }
+  isCutting = !isCutting;
 });
-
-slider.oninput = function () {
-  output.innerHTML = this.value;
-};
-
-circleSize.oninput = function () {
-  outputCircle.innerHTML = this.value;
-};
 
 /*** Funciones ***/
 
@@ -96,7 +144,6 @@ function setImage(e) {
 
   canvasDiv.classList.remove("oculto");
   optionsDiv.classList.remove("oculto");
-  slidecontainer.classList.remove("oculto");
 
   let file = e.target.files[0];
   let reader = new FileReader();
@@ -121,16 +168,23 @@ function rotateImage(degrees) {
 function aplicateBlur(number) {
   const finalValue = number * 0.1;
   let img = document.querySelector(".canvas");
-  if (!img) return;
-  img.style.filter = `hue-rotate(${
-    isNegativo % 2 == 0 ? 0 : 90
-  }deg) blur(${finalValue}px)`;
+  img.style.filter = `blur(${finalValue}px)`;
 }
 
 function makeMask() {
-  let mask = document.createElement("div");
-  mask.classList.add("mask");
-  mask.setAttribute("id", "mask");
-  canvasDiv.appendChild(mask);
-  slideBarBtn.classList.remove("oculto");
+  if (!isCutting) {
+    let mask = document.createElement("div");
+    mask.classList.add("mask");
+    mask.setAttribute("id", "mask");
+    canvasDiv.appendChild(mask);
+  } else {
+    let mask = document.getElementById("mask");
+    mask.remove();
+  }
+}
+
+function adjustCircleSize() {
+  const mask = document.getElementById("mask");
+  const finalValue = circleSize.value;
+  mask.style.setProperty("--circle-size", `${finalValue}px`);
 }

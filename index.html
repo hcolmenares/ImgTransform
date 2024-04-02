@@ -32,33 +32,25 @@
 
             <button id="applyMask">Recortar - Círculo</button>
 
-            <button>Descargar</button>
+            <!-- <button>Descargar</button> -->
           </div>
 
           <div id="slidecontainer" class="slidecontainer mt-3 oculto">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value="50"
-              class="slider"
-              id="slider"
-            />
-            <p>Valor: <span id="value"></span></p>
+            <label for="slider">Efecto de desenfoque:</label>
+            <div class="actions">
+              <div id="subtractBlur" class="action-input">-</div>
+              <input type="number" id="slider" name="slider" value="5"/>
+              <div id="addBlur" class="action-input">+</div>
+            </div>
           </div>
 
           <div id="slideBar" class="slidecontainer mt-3 oculto">
-            <label for="circleSize" class="mb-1">Tamaño del círculo:</label>
-            <input
-              type="range"
-              id="circleSize"
-              class="slider"
-              name="circleSize"
-              min="10"
-              max="300"
-              value="100"
-            />
-            <p>Valor: <span id="valueMask"></span></p>
+            <label for="circleSize">Tamaño del círculo:</label>
+            <div class="actions">
+              <div id="subtract" class="action-input">-</div>
+              <input type="number" id="circleSize" name="circleSize" value="100"/>
+              <div id="add" class="action-input">+</div>
+            </div>
           </div>
 
           <input type="file" id="fileInput" accept="image/*" />
