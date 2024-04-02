@@ -8,17 +8,13 @@
   </head>
 
   <body>
-    <div class="container column">
+    <div id="container" class="container column">
       <h2 class="heading">Transformar Imagen</h2>
 
       <div class="content center mt-2">
         <div id="canvas" class="img-content center oculto"></div>
 
         <div class="options-content column mb-1">
-          <input type="file" id="fileInput" accept="image/*" />
-
-          <button id="updload">Subir Imagen</button>
-
           <div id="options" class="column oculto">
             <button id="verNegativo">Negativo</button>
 
@@ -27,11 +23,14 @@
                 Rotar <ion-icon name="reload-outline"></ion-icon>
               </button>
               <button id="rotateLeft">
-                Rotar <ion-icon class="rotate-icon" name="reload-outline"></ion-icon>
+                Rotar
+                <ion-icon class="rotate-icon" name="reload-outline"></ion-icon>
               </button>
             </div>
 
             <button id="blur">Desenfoque</button>
+
+            <button id="applyMask">Recortar - Círculo</button>
 
             <button>Descargar</button>
           </div>
@@ -47,9 +46,30 @@
             />
             <p>Valor: <span id="value"></span></p>
           </div>
+
+          <div id="slideBar" class="slidecontainer mt-3 oculto">
+            <label for="circleSize" class="mb-1">Tamaño del círculo:</label>
+            <input
+              type="range"
+              id="circleSize"
+              class="slider"
+              name="circleSize"
+              min="10"
+              max="300"
+              value="100"
+            />
+            <p>Valor: <span id="valueMask"></span></p>
+          </div>
+
+          <input type="file" id="fileInput" accept="image/*" />
+          <button id="updload">Subir Imagen</button>
         </div>
       </div>
     </div>
+
+    <footer class="footer">
+      <p>Developed by <i><img src="img/github-mark-white.svg" alt="github logo"></i> <a href="https://github.com/hcolmenares">Hugo Colmenares</a> </p>
+    </footer>
 
     <script src="main.js"></script>
     <script

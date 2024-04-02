@@ -2,19 +2,25 @@
 
 let rotacion = 1;
 let isNegativo = 1;
+const containerDiv = document.getElementById("container");
 const canvasDiv = document.getElementById("canvas");
 const optionsDiv = document.getElementById("options");
 const verNegativoDiv = document.getElementById("verNegativo");
 const slider = document.getElementById("slider");
+const circleSize = document.getElementById("circleSize");
 const slidecontainer = document.getElementById("slidecontainer");
 const output = document.getElementById("value");
+const outputCircle = document.getElementById("valueMask");
 const rotateRight = document.getElementById("rotateRight");
 const rotateLeft = document.getElementById("rotateLeft");
 const fileInput = document.getElementById("fileInput");
 const updload = document.getElementById("updload");
 const blurBtn = document.getElementById("blur");
+const applyMaskBtn = document.getElementById("applyMask");
+const slideBarBtn = document.getElementById("slideBar");
 
 output.innerHTML = slider.value;
+outputCircle.innerHTML = circleSize.value;
 
 /*** Añadir Listerner ***/
 
@@ -61,13 +67,28 @@ blurBtn.addEventListener("click", function () {
   aplicateBlur(slider.value);
 });
 
+circleSize.addEventListener("input", function() {
+  const mask = document.getElementById("mask");
+  const finalValue = circleSize.value;
+  mask.style.setProperty("--circle-size", `${finalValue}px`);
+});
+
+applyMaskBtn.addEventListener("click", function () {
+  makeMask();
+});
+
 slider.oninput = function () {
   output.innerHTML = this.value;
+};
+
+circleSize.oninput = function () {
+  outputCircle.innerHTML = this.value;
 };
 
 /*** Funciones ***/
 
 function setImage(e) {
+  containerDiv.classList.add("tablet");
   let oldImage = document.querySelector(".canvas");
   if (oldImage) {
     oldImage.remove();
@@ -101,5 +122,15 @@ function aplicateBlur(number) {
   const finalValue = number * 0.1;
   let img = document.querySelector(".canvas");
   if (!img) return;
-  img.style.filter = `hue-rotate(${isNegativo % 2 == 0 ? 0 : 90}deg) blur(${finalValue}px)`;
+  img.style.filter = `hue-rotate(${
+    isNegativo % 2 == 0 ? 0 : 90
+  }deg) blur(${finalValue}px)`;
+}
+
+function makeMask() {
+  let mask = document.createElement("div");
+  mask.classList.add("mask");
+  mask.setAttribute("id", "mask");
+  canvasDiv.appendChild(mask);
+  slideBarBtn.classList.remove("oculto");
 }
